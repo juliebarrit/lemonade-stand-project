@@ -1,35 +1,41 @@
 "use client";
 
-import { useCart } from "@/context/CartContext";
+import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCart } from "@/context/CartContext";
+import { useRouter } from "next/navigation";
 
 export default function NavigationBar() {
   const { cart } = useCart();
-  const [cartChanged, setCartChanged] = useState(false);
-  const prevCartCount = useRef(cart.length);
+  const [isMounted, setIsMounted] = useState(false);
+  const collapseRef = useRef(null);
+  let collapseInstance = useRef(null);
+  const router = useRouter();
 
-  // Lukker navbaren efter klik
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && collapseRef.current) {
+      import("bootstrap/js/dist/collapse").then(({ default: Collapse }) => {
+        collapseInstance.current = new Collapse(collapseRef.current, { toggle: false });
+      });
+    }
+  }, []);
+
   const collapseNavbar = () => {
-    const navbarCollapse = document.getElementById("navbarNav");
-    const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
-    if (bsCollapse) bsCollapse.hide();
+    if (collapseInstance.current) {
+      collapseInstance.current.hide();
+    }
   };
 
-  // Visuel effekt når noget tilføjes til kurv
-  useEffect(() => {
-    if (cart.length > prevCartCount.current) {
-      setCartChanged(true);
-      setTimeout(() => setCartChanged(false), 700);
-    }
-    prevCartCount.current = cart.length;
-  }, [cart]);
-
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container">
-        <Link className="navbar-brand fw-bold" href="/">🍋 Lemonade Stand</Link>
-
+        <Link className="navbar-brand" href="/" onClick={collapseNavbar}>
+          🍋 Lemonade Stand
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -39,25 +45,23 @@ export default function NavigationBar() {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span className="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon" />
         </button>
-
-        <div className="collapse navbar-collapse" id="navbarNav">
+        <div className="collapse navbar-collapse" id="navbarNav" ref={collapseRef}>
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <Link className="nav-link" href="/" onClick={collapseNavbar}>Home</Link>
+              <Link className="nav-link" href="/" onClick={collapseNavbar}>
+                Home
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="/products" onClick={collapseNavbar}>Products</Link>
+              <Link className="nav-link" href="/products" onClick={collapseNavbar}>
+                Products
+              </Link>
             </li>
             <li className="nav-item">
-              <Link
-                className={`nav-link position-relative ${cartChanged ? "text-success fw-bold" : ""}`}
-                href="/cart"
-                onClick={collapseNavbar}
-              >
-                🛒 Cart
-                <span className="badge bg-primary ms-1">{cart.length}</span>
+              <Link className="nav-link" href="/cart" onClick={collapseNavbar}>
+                Cart 🛒 ({isMounted ? cart.length : "..."})
               </Link>
             </li>
           </ul>
