@@ -44,6 +44,11 @@ export default function Products() {
     addToCart(product);
     setToastText(`${product.name} er tilføjet til kurven`);
     setShowToast(true);
+
+    // Persist cart data to local storage
+    const currentCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const updatedCart = [...currentCart, product];
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
   return (

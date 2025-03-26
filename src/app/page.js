@@ -1,95 +1,84 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import HeroSection from "@/components/HeroSection"; // ✅ Import hero component
+import { Container, Row, Col, Button, Card } from "react-bootstrap";
+import Link from "next/link";
+
+export default function HomePage() {
+  const trendingProducts = [
+    {
+      id: 1,
+      name: "Classic Lemonade",
+      price: 25,
+      image: "https://images.unsplash.com/photo-1623084921164-4a8c5c37a912?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8bGVtb25hZGV8ZW58MHx8MHx8fDA%3D",
+    },
+    {
+      id: 2,
+      name: "Strawberry Twist",
+      price: 30,
+      image: "https://images.unsplash.com/photo-1573500883698-e3ef47a95feb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c3RyYXdiZXJyeSUyMGxlbW9uYWRlfGVufDB8fDB8fHww",
+    },
+    {
+      id: 3,
+      name: "Minty Fresh",
+      price: 28,
+      image: "https://images.unsplash.com/photo-1507281549113-040fcfef650e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWludCUyMGxlbW9uYWRlfGVufDB8fDB8fHww",
+    },
+    {
+      id: 4,
+      name: "Peachy Breeze",
+      price: 32,
+      image: "https://images.unsplash.com/photo-1616434963473-030c8f1ce663?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGVhY2glMjBsZW1vbmFkZXxlbnwwfHwwfHx8MA%3D%3D",
+    },
+  ];
+
   return (
-    <div className="flex flex-col min-h-screen p-8 pb-20 sm:p-20 items-center gap-16">
-      {/* Main Section */}
-      <main className="flex flex-col items-center sm:items-start gap-8">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
+    <>
+      <HeroSection />
 
-        <ol className="list-decimal list-inside text-sm text-center sm:text-left">
-          <li className="mb-2 tracking-tight">
-            Welcome to{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-mono font-semibold">
-              src/pages/index.js
-            </code>
-            .
-          </li>
-          <li className="tracking-tight">Save and see your changes instantly.</li>
-        </ol>
+      {/* Trending Products */}
+      <Container className="mt-5">
+        <h2 className="text-center mb-4">Trending Right Now</h2>
+        <Row>
+          {trendingProducts.map((product) => (
+            <Col key={product.id} md={6} lg={3} className="mb-4">
+              <Card className="shadow-sm h-100">
+                <Card.Img
+                  variant="top"
+                  src={product.image}
+                  alt={product.name}
+                  style={{ height: "200px", objectFit: "cover" }}
+                />
+                <Card.Body className="d-flex flex-column text-center">
+                  <Card.Title>{product.name}</Card.Title>
+                  <Card.Text className="text-success fw-semibold">
+                    {product.price} DKK
+                  </Card.Text>
+                  <Link href="/products">
+                    <Button
+                      variant="outline-primary"
+                      size="sm"
+                      className="mt-auto"
+                    >
+                      Buy now
+                    </Button>
+                  </Link>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </Container>
 
-        {/* Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 items-center">
-          <a
-            className="rounded-full border border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-
-          <a
-            className="rounded-full border border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-
-      {/* Footer Section */}
-      <footer className="flex gap-6 flex-wrap items-center justify-center">
-        <FooterLink
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          src="/file.svg"
-          alt="File icon"
-          text="Learn"
-        />
-        <FooterLink
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          src="/window.svg"
-          alt="Window icon"
-          text="Examples"
-        />
-        <FooterLink
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          src="/globe.svg"
-          alt="Globe icon"
-          text="Go to nextjs.org →"
-        />
-      </footer>
-    </div>
-  );
-}
-
-// FooterLink Component (Reusable)
-function FooterLink({ href, src, alt, text }) {
-  return (
-    <a
-      className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <Image aria-hidden src={src} alt={alt} width={16} height={16} />
-      {text}
-    </a>
+      {/* CTA */}
+      <div className="bg-light py-5 mt-4 text-center">
+        <h3 className="mb-3">Thirsty for more?</h3>
+        <Link href="/products">
+          <Button variant="warning" size="lg">
+            Explore all lemonades 🍹
+          </Button>
+        </Link>
+      </div>
+    </>
   );
 }

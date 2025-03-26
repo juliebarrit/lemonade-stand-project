@@ -2,19 +2,27 @@
 
 import { useCart } from "@/context/CartContext";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { useRouter } from 'next/navigation';
 
 export default function CartPage() {
-  const {
-    cart,
-    increaseQuantity,
-    decreaseQuantity,
-    removeFromCart,
-  } = useCart();
+  const { cart, increaseQuantity, decreaseQuantity, removeFromCart, clearCart } = useCart();
+  const router = useRouter();
 
   const totalPrice = cart.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
+
+  const handleCheckout = () => {
+    // Save the cart to localStorage
+    localStorage.setItem("checkoutProducts", JSON.stringify(cart));
+
+    // Clear the cart immediately
+    clearCart();
+
+    // Use the router to navigate to the checkout page
+    router.push('/checkout');
+  };
 
   return (
     <Container className="mt-5">
@@ -66,10 +74,14 @@ export default function CartPage() {
             ))}
           </Row>
 
-          {/* Total pris og checkout */}
           <div className="text-center mt-5">
             <h4>Samlet pris: {totalPrice.toFixed(2)} DKK</h4>
-            <Button variant="success" size="lg" className="mt-3">
+            <Button
+              variant="success"
+              size="lg"
+              className="mt-3"
+              onClick={handleCheckout}
+            >
               Go to checkout
             </Button>
           </div>

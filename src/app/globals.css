@@ -1,4 +1,17 @@
 .nav-link.text-success {
-    transition: all 0.3s ease;
-  }
-  
+  transition: all 0.3s ease;
+}
+
+/* in globals.css */
+body {
+  overflow-x: hidden !important;
+}
+
+.hero-section {
+  width: 100%; /* Ensure it spans the full container width */
+  max-width: calc(100vw - 40px); /* Adjust width to account for margins */
+  margin: 120px auto; /* Center the section with margin */
+  padding: 0; /* Remove any padding */
+  box-sizing: border-box; /* Include padding and border in width calculation */
+  overflow: hidden; /* Prevent content overflow */
+}
